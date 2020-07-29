@@ -1,0 +1,83 @@
+DB 테이블
+
+
+지도 검색
+1aAj908XC0P93DkPzp2n
+0qbdXFSZX8
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=1aAj908XC0P93DkPzp2n&submodules=geocoder"></script>
+
+api id: RNdcCIy4LSvRF5JQ9Lvb
+api pw: rkMcRmbCtB
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=RNdcCIy4LSvRF5JQ9Lvb&submodules=geocoder"></script>
+
+예전
+api id: kDHMkxVGyQtHwfCmuVRx
+api pw: 2A0DqK_XB3
+
+create table member(
+	member_num int primary key auto_increment,
+	id varchar(50) unique not null,
+	password varchar(100) not null,
+	name varchar(20) not null,
+	email varchar(100) not null,
+	phone varchar(20) not null,
+	profilepic varchar(50) not null,
+	question varchar(50),
+	answer varchar(50)
+);
+
+create table messagesender(
+	message_num int primary key auto_increment,	
+	sender varchar(50) not null,
+	receiver varchar(50) not null,
+	title varchar(50) not null,
+	content text,	
+	write_date datetime not null,
+	checked int not null,
+	foreign key(sender) references member(id),
+	foreign key(receiver) references member(id)
+);
+
+create table messagereceiver(
+	message_num int primary key auto_increment,	
+	sender varchar(50) not null,
+	receiver varchar(50) not null,
+	title varchar(50) not null,
+	content text,	
+	write_date datetime not null,
+	checked int not null,
+	foreign key(sender) references member(id),
+	foreign key(receiver) references member(id)
+);
+
+
+create table board(
+	board_num int primary key auto_increment,
+	title varchar(50) not null,
+	writer varchar(50) not null,
+	content longtext,
+	read_count int not null,
+	write_date datetime not null,
+	board_category varchar(50) not null
+);
+
+create table picture(
+	picture_num int primary key auto_increment,
+	board_num int not null,
+	originName varchar(100) not null,
+	randomName text not null,
+	foreign key(board_num) references board(board_num)	
+);
+
+create table reply(
+	reply_num int primary key auto_increment,
+	board_num int not null,
+	writer varchar(50) not null,
+	content text,
+	grp int not null,
+	seq int not null,
+	lvl int not null,
+	foreign key(board_num) references board(board_num)
+);
+
+

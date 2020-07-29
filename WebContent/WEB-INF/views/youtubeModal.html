@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+
+<style type="text/css">
+
+.modal{
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog.modal-lg {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle; 
+}
+
+.modal-body {
+background-color: black;
+}
+.modal-footer {
+background-color: black;
+
+}
+
+</style>
+</head>
+<body>
+	<div class="modal fade" id="youtube" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div id="player"></div>
+					<script type="text/javascript">
+						var tag = document.createElement('script');
+						tag.src = "https://www.youtube.com/iframe_api";
+						var firstScriptTag = document
+								.getElementsByTagName('script')[0];
+						firstScriptTag.parentNode.insertBefore(tag,
+								firstScriptTag);
+						var player;
+						$('#youtube').on('shown.bs.modal', function() {
+							player = new YT.Player('player', {
+								height : '430',
+								width : '768',
+								videoId : 'X9ROHx6Myhw',
+								playerVars : {
+									modestbranding : '1',
+									showinfo : '0',
+									autoplay : '1',
+									rel : '0'
+								},
+
+								events : {
+									'onReady' : function(event) {
+										event.target.playVideo();
+									}
+								}
+							});
+						});
+						$('#youtube').on('hidden.bs.modal', function() {
+							player.stopVideo();
+							var parent = $('#player').parent();
+							parent.html('<div id="player"></div>');
+						});
+					</script>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- modal-content -->
+		</div>
+		<!-- modal-dialog -->
+	</div>
+	<!-- main modal -->
+
+
+</body>
+</html>

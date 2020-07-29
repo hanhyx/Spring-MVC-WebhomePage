@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.mapper.MemberMapper">
+    <insert id="insert" parameterType="MemberVO">
+        INSERT INTO MEMBER(ID,PASSWORD,NAME,EMAIL,PHONE,PROFILEPIC,QUESTION,ANSWER)
+        VALUES(#{id},#{password},#{name},#{email},#{phone},#{profilePicPath},#{question},#{answer})
+    </insert>
+     
+    <select id="selectMember" parameterType="String"
+                               resultMap="memberResultMap">
+        SELECT * FROM MEMBER
+        WHERE ID=#{id}
+    </select>
+    
+    <select id="selectProfilePic" parameterType="String"
+                               resultType="String">
+        SELECT PROFILEPIC FROM MEMBER
+        WHERE ID=#{id}
+    </select>
+    
+    <select id="chkDupId" parameterType="String"
+                               resultType="int">
+        SELECT COUNT(*) FROM MEMBER
+        WHERE ID=#{id}
+    </select>
+    
+    <select id="chkOldPw" parameterType="String"
+                               resultType="int">
+        SELECT COUNT(*) FROM MEMBER
+        WHERE ID=#{id} and PASSWORD=#{password}
+    </select>
+    
+    <select id="selectMemberNum" resultType="int">
+        SELECT COUNT(ID) FROM MEMBER 
+        WHERE ID=#{id} and PASSWORD=#{password}
+    </select>
+    
+    <update id="update" parameterType="MemberVO">
+		UPDATE MEMBER
+		SET
+		PASSWORD=#{password}, EMAIL=#{email},
+		PHONE=#{phone}, PROFILEPIC=#{profilePicPath}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<update id="updatePw" parameterType="MemberVO">
+		UPDATE MEMBER
+		SET
+		PASSWORD=#{password}
+		WHERE
+		ID=#{id}
+	</update>
+     
+    <resultMap type="MemberVO" id="memberResultMap">
+		<result property="member_num" column="MEMBER_NUM" />
+		<result property="id" column="ID" />
+		<result property="password" column="PASSWORD" />
+		<result property="name" column="NAME" />
+		<result property="email" column="EMAIL" />
+		<result property="phone" column="PHONE" />
+		<result property="profilePicPath" column="PROFILEPIC" />
+		<result property="question" column="QUESTION" />
+		<result property="answer" column="ANSWER" />		
+	</resultMap>
+</mapper>

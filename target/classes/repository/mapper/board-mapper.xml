@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.mapper.BoardMapper">
+	<insert id="insert" parameterType="BoardVO" useGeneratedKeys="true" keyProperty="boardNum">
+		INSERT INTO BOARD
+		(TITLE,WRITER,CONTENT,READ_COUNT,WRITE_DATE,BOARD_CATEGORY)
+		VALUES
+		(#{title}, #{writer}, #{content}, #{readCount},
+		#{writeDate},#{boardCategory})
+	</insert>
+
+	<select id="selectTotalCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	
+	<select id="selectSearchedCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD WHERE BOARD_CATEGORY=#{boardCategory} AND TITLE LIKE CONCAT('%',#{keyword},'%')
+	</select>
+	
+	<select id="selectCategoryCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD WHERE BOARD_CATEGORY=#{boardCategory}
+	</select>
+
+	<select id="select" parameterType="int" resultMap="boardResultMap">
+		SELECT * FROM BOARD
+		WHERE BOARD_NUM=#{boardNum}
+	</select>
+	
+	<select id="bestPicList" resultMap="boardResultMap">
+		SELECT * FROM BOARD ORDER BY READ_COUNT DESC LIMIT 0, 4
+	</select>
+	
+	<select id="selectList" resultMap="boardResultMap">
+		SELECT * FROM
+		BOARD
+		ORDER BY
+		BOARD_NUM DESC
+		LIMIT
+		#{startRow},#{count}
+	</select>
+	
+	<select id="selectSearchedList" resultMap="boardResultMap">
+		SELECT * FROM
+		BOARD WHERE BOARD_CATEGORY=#{boardCategory} AND TITLE LIKE CONCAT('%',#{keyword},'%')
+		ORDER BY
+		BOARD_NUM DESC
+		LIMIT
+		#{startRow},#{count}
+	</select>
+	
+	<select id="selectCategoryList" resultMap="boardResultMap">
+		SELECT * FROM
+		BOARD WHERE BOARD_CATEGORY=#{boardCategory}
+		ORDER BY
+		BOARD_NUM DESC
+		LIMIT
+		#{startRow},#{count}
+	</select>
+
+	<update id="update" parameterType="BoardVO">
+		UPDATE BOARD
+		SET
+		TITLE=#{title}, CONTENT=#{content},
+		WRITE_DATE=#{writeDate}, BOARD_CATEGORY=#{boardCategory}
+		WHERE
+		BOARD_NUM=#{boardNum}
+	</update>
+
+	<update id="updateReadCount" parameterType="int">
+		UPDATE BOARD
+		SET
+		READ_COUNT=READ_COUNT+1
+		WHERE
+		BOARD_NUM=#{boardNum}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM BOARD
+		WHERE BOARD_NUM=#{boardNum}
+	</delete>
+	
+	<resultMap type="BoardVO" id="boardResultMap">
+		<result property="title" column="TITLE" />
+		<result property="boardNum" column="BOARD_NUM" />
+		<result property="writer" column="WRITER" />
+		<result property="writeDate" column="WRITE_DATE" />
+		<result property="readCount" column="READ_COUNT" />
+		<result property="content" column="CONTENT" />
+		<result property="boardCategory" column="BOARD_CATEGORY" />
+	</resultMap>
+
+</mapper>

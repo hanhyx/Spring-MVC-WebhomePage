@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.mapper.MessageSMapper">
+
+	<insert id="insertSender" parameterType="MessageVO" useGeneratedKeys="true"
+		keyProperty="message_num">
+		INSERT INTO MESSAGESENDER
+		(SENDER,RECEIVER,TITLE,CONTENT,WRITE_DATE,CHECKED)
+		VALUES
+		(#{sender},
+		#{receiver}, #{title}, #{content},
+		#{writeDate},#{checked})
+	</insert>
+
+	<select id="selectReceiveCount" parameterType="String"
+		resultType="int">
+		SELECT COUNT(*) FROM
+		MESSAGESENDER WHERE
+		RECEIVER=#{receiver}
+	</select>
+
+	<select id="selectSendCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM
+		MESSAGESENDER WHERE SENDER=#{sender}
+	</select>
+
+	<select id="selectSender" parameterType="int" resultMap="messageResultMap">
+		SELECT
+		* FROM
+		MESSAGESENDER
+		WHERE MESSAGE_NUM=#{message_num}
+	</select>
+
+	<select id="selectReceiveList" resultMap="messageResultMap">
+		SELECT * FROM
+		MESSAGESENDER WHERE RECEIVER=#{receiver}
+		ORDER BY
+		MESSAGE_NUM DESC
+		LIMIT
+		#{startRow},#{count}
+	</select>
+
+	<select id="selectSendList" resultMap="messageResultMap">
+		SELECT * FROM
+		MESSAGESENDER WHERE SENDER=#{sender}
+		ORDER BY
+		MESSAGE_NUM DESC
+		LIMIT
+		#{startRow},#{count}
+	</select>
+
+	<delete id="deleteSender" parameterType="int">
+		DELETE FROM MESSAGESENDER
+		WHERE
+		MESSAGE_NUM=#{message_num}
+	</delete>
+
+	<resultMap type="MessageVO" id="messageResultMap">
+		<result property="message_num" column="MESSAGE_NUM" />
+		<result property="sender" column="SENDER" />
+		<result property="receiver" column="RECEIVER" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="writeDate" column="WRITE_DATE" />
+		<result property="checked" column="CHECKED" />
+	</resultMap>
+
+</mapper>
